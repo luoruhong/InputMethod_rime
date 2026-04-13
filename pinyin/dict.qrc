@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icon/backspace.png</file>
+        <file>icon/drop_white.png</file>
+        <file>icon/enter.png</file>
+        <file>icon/hide.png</file>
+        <file>icon/lowercase.png</file>
+        <file>icon/space.png</file>
+        <file>icon/up_white.png</file>
+        <file>icon/uppercase.png</file>
+    </qresource>
+</RCC>
