@@ -40,16 +40,15 @@ const int kMaxCandidates = 1024; // 数量上限
 
 1. 删除rime-data/cn\_dicts/base.dict.yaml
 2. 在rime-data/rime\_ice.dict.yaml将cn\_dicts/base注释掉
-
-   ![输入方案对比](images/dict_scheme.png)
+   
+![输入方案配置](images/rime_ice.dict.yaml.png)
 
    删除前主词库+用户词库大小为36.3 MB
 
    删除后主词库+用户词库大小为3.18 MB
 
 ## 词库方案选型
-
-![输入方案配置](images/rime_ice.dict.yaml.png)
+![输入方案对比](images/dict_scheme.png)
 
 以上词库方案皆可在github下载
 
