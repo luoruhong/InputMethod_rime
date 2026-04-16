@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <rime_api.h>
-
+#undef Bool
 class Candidate {
 public:
     QString text; // 候选词

@@ -28,22 +28,16 @@ bool RimeUtils::init(const QString sharedDir, const QString userDir, const QStri
 
     // 2. 设置Rime配置参数(宏定义)
     RIME_STRUCT(RimeTraits, traits);
-    traits.app_name = "qt_rime_demo";
+    traits.app_name = "my_ime";
     // 设置Rime数据目录，请根据实际情况调整
     auto sharedData_ = sharedDir.toUtf8();
     traits.shared_data_dir = sharedData_.constData();
     auto userDir_ = userDir.toUtf8();
     traits.user_data_dir = userDir_.constData();
-    QDir dir(sharedDir);
-    if (!dir.exists() && !dir.mkpath(sharedDir)) {
-        qWarning() << "创建目标目录失败:" << sharedDir;
-        return false;
-    }
 
     // 3. 初始化Rime
     m_rime->setup(&traits);
     m_rime->initialize(nullptr);
-
     // 4. 检查是否初始化成功并创建会话
     if (m_rime->start_maintenance(true)) {
         m_rime->join_maintenance_thread();
@@ -60,12 +54,14 @@ bool RimeUtils::init(const QString sharedDir, const QString userDir, const QStri
         m_rime->select_schema(m_session_id, schema_.constData());
     }
 
-    RimeSetOption(m_session_id, "simplification", True); // 设置简体(有些输入方案默认有可能是繁体,如luna-pinyin)
+    m_rime->set_option(m_session_id, "simplification", True); // 设置简体(有些输入方案默认有可能是繁体,如luna-pinyin)
 
-    bool flag = (RimeGetOption(m_session_id, "simplification") == True);
+    bool flag = (m_rime->get_option(m_session_id, "simplification") == True);
+#ifdef QT_DEBUG
     qDebug() << QString("Switch simplified Chinese : %1").arg(flag ? "successfully" : "Failed");
 
     qDebug() << "RimeEngine initialized successfully!";
+#endif
     return true;
 }
 
@@ -97,8 +93,8 @@ std::vector<Candidate> RimeUtils::getAllCandidates() const
 
     // 2.迭代器获取所有候选词
     RimeCandidateListIterator iter = { 0 };
-    if (RimeCandidateListBegin(m_session_id, &iter)) {
-        while ((kMaxCandidates > index) && RimeCandidateListNext(&iter)) {
+    if (m_rime->candidate_list_begin(m_session_id, &iter)) {
+        while ((kMaxCandidates > index) && m_rime->candidate_list_next(&iter)) {
             Candidate cand;
             cand.text = QString::fromUtf8(iter.candidate.text);
             cand.comment = QString::fromUtf8(iter.candidate.comment);
@@ -106,7 +102,7 @@ std::vector<Candidate> RimeUtils::getAllCandidates() const
             allCandidates.push_back(cand);
             index++;
         }
-        RimeCandidateListEnd(&iter);
+        m_rime->candidate_list_end(&iter);
     }
 
     return allCandidates;
@@ -197,7 +193,7 @@ bool RimeUtils::processInputString(const QString& text)
     // 2. 将字符串通过 simulate_key_sequence 喂给 Rime
     //    这个函数会像真实按键一样逐个处理字符
     auto text_ = text.toUtf8();
-    if (!RimeSetInput(m_session_id, text_.constData())) {
+    if (!m_rime->set_input(m_session_id, text_.constData())) {
         return false;
     }
     emit candidatesUpdated();

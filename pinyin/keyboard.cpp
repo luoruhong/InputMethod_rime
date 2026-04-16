@@ -603,11 +603,6 @@ void KeyBoard::getCandidateList(const QString text)
 
 void KeyBoard::on_listWidget_itemClicked(QListWidgetItem* item)
 {
-    //    QKeyEvent keyPress(QEvent::KeyPress, Qt::Key_unknown, Qt::NoModifier,
-    //        item->text());
-    //    if (this->m_edit) {
-    //        QApplication::sendEvent(this->m_edit, &keyPress);
-    //    }
 
     // 选择对应序号的词
     engine->selectCandidate(item->data(Qt::UserRole).toInt());
@@ -615,10 +610,6 @@ void KeyBoard::on_listWidget_itemClicked(QListWidgetItem* item)
 
 void KeyBoard::on_tableWidget_cellClicked(int row, int column)
 {
-    //    QKeyEvent keyPress(QEvent::KeyPress, Qt::Key_unknown, Qt::NoModifier, ui->tableWidget->item(row, column)->text());
-    //    if (this->m_edit) {
-    //        QApplication::sendEvent(this->m_edit, &keyPress);
-    //    }
 
     // 选择对应序号的词
     engine->selectCandidate(ui->tableWidget->item(row, column)->data(Qt::UserRole).toInt());

@@ -15,14 +15,14 @@ SOURCES += \
     $$PWD/keybutton.cpp \
     $$PWD/rimeutils.cpp \
 
-win32 {
-    LIBS += -L$$PWD/librime/win64/lib/ -lrime
-    INCLUDEPATH += $$PWD/librime/win64/include
-    DEPENDPATH += $$PWD/librime/win64/include
+win32:{
+    DIR_PLATFORM = win64
+}
+unix:{
+    DIR_PLATFORM = aarch64
 }
 
-#apt install librime-dev
-unix {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += rime
-}
+LIBS += -L$$PWD/librime/$${DIR_PLATFORM}/lib/ -lrime
+
+INCLUDEPATH += $$PWD/librime/$${DIR_PLATFORM}/include
+DEPENDPATH += $$PWD/librime/$${DIR_PLATFORM}/include
